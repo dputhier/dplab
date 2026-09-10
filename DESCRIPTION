@@ -1,0 +1,19 @@
+Package: denlabutils
+Type: Package
+Title: Utility Functions for Package develop in Denis Puthier'
+        developements's lab
+Version: 0.1.0
+Author: Denis Puthier
+Maintainer: Denis Puthier <denis.puthier@univ-amu.fr>
+Authors@R: person("Denis", "Puthier", email = "denis.puthier@univ-amu.fr", 
+                  role = c("aut", "cre"))
+Description: A collection of utility functions for package development of Denis Puthier's lab.
+License: GPL-3
+Encoding: UTF-8
+Imports: grDevices, methods, utils, envnames, cli, ggplot2, stats
+Config/roxygen2/version: 8.1.0
+NeedsCompilation: no
+Suggests:
+    testthat
+Config/testthat/edition: 3
+Packaged: 2026-08-27 11:30:55 UTC; puthier
