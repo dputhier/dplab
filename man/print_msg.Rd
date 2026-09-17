@@ -20,7 +20,7 @@ Print a message based on the level of verbosity.
 }
 \examples{
 # Set verbosity level to 1
-library(denlabutils) 
+library(dplab) 
 set_verbosity(1)
 print_msg("Hello world!", msg_type = "INFO")
 set_verbosity(2)

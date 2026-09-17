@@ -6,9 +6,9 @@
 \usage{
 make_tmp_file(
   prefix = "tmp",
-  pkgname = "denlabutils",
+  pkgname = "dplab",
   suffix = "",
-  store = TRUE,
+  cleanup_on_exit = TRUE,
   dir = tempdir()
 )
 }
@@ -16,12 +16,12 @@ make_tmp_file(
 \item{prefix}{A prefix for the temporary file. The package name will be 
 prepended to this prefix. Defaults to "tmp".}
 
-\item{pkgname}{The package name to use in the filename. Defaults to "denlabutils".}
+\item{pkgname}{The package name to use in the filename. Defaults to "dplab".}
 
 \item{suffix}{A suffix for the temporary file (e.g., ".txt", ".csv"). 
 Defaults to "" (no suffix).}
 
-\item{store}{Logical indicating whether to store the file path in the 
+\item{cleanup_on_exit}{Logical indicating whether to store the file path in the 
 temporary file list for automatic cleanup. Defaults to TRUE.}
 
 \item{dir}{The directory where the temporary file should be created. 
@@ -39,12 +39,13 @@ when the user manually triggers cleanup.
 \examples{
 \dontrun{
 # Create a temporary file with default settings
-tmp_file <- make_tmp_file()
+tmp_file <- make_tmp_file(). The set_verbosity() function 
+can be used to control the verbosity of messages.
 
 # Create a temporary CSV file
 tmp_csv <- make_tmp_file(prefix = "data", suffix = ".csv")
 
 # Create a temporary file without automatic cleanup
-tmp_manual <- make_tmp_file(store = FALSE)
+tmp_manual <- make_tmp_file(cleanup_on_exit = FALSE)
 }
 }

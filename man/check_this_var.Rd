@@ -9,6 +9,7 @@ check_this_var(
   type = c("char", "num", "bool", "int"),
   x_name = deparse(substitute(x)),
   null_accepted = FALSE,
+  empty_accepted = FALSE,
   calling_function = NULL
 )
 }
@@ -20,6 +21,8 @@ check_this_var(
 \item{x_name}{The name of the variable as a string.}
 
 \item{null_accepted}{Whether NULL values are accepted.}
+
+\item{empty_accepted}{Whether empty strings are accepted (only relevant for character type).}
 
 \item{calling_function}{The name of the calling function (automatically obtained if envnames is available).}
 }

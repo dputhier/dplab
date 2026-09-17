@@ -134,15 +134,9 @@ discrete_palette <- function(
     palette = c("Ju1", "De1", "ggplot")
 ) {
   
-  if (!is.numeric(n) ||
-      length(n) != 1 ||
-      is.na(n) ||
-      n < 1 ||
-      n %% 1 != 0) {
-    
-    cli::cli_abort(
-      "{.arg n} must be a positive integer."
-    )
+  check_this_var(n, type = "int")
+  if (n < 1) {
+    print_msg("n must be a positive integer.", msg_type = "STOP")
   }
   
   n <- as.integer(n)

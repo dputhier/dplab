@@ -6,14 +6,11 @@
 #'
 #' This function defines a custom theme for ggplot2 plots with specific adjustments
 #' to the legend key dimensions, legend text, axis titles, and strip text sizes.
-#' This theme is used across DenLab packages (STarlight, Genreport, scigenex, etc.)
-#' for consistent visualization.
 #'
 #' @return A ggplot2 theme object with predefined settings for legend, axis, and strip text.
 #'
 #' @details
-#' The \code{denlab_gg_theme} function customizes the appearance of ggplot2 plots
-#' with smaller legend keys and text for compact, publication-ready figures.
+#' The \code{denlab_gg_theme} function customizes the appearance of ggplot2 plots.
 #'
 #' @examples
 #' \dontrun{

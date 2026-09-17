@@ -1,4 +1,4 @@
-# denlabutils
+# dplab
 
 A collection of utility functions for R packages developed by Denis Puthier's labs  R packages.
 
@@ -8,9 +8,9 @@ You can install the package from the local directory:
 
 ```r
 # Install from source
-install.packages("path/to/denlabutils", repos = NULL, type = "source")
+install.packages("path/to/dplab", repos = NULL, type = "source")
 
 # Or use devtools
-devtools::install_local("path/to/denlabutils")
+devtools::install_local("path/to/dplab")
 ```
 

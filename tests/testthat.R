@@ -1,4 +1,4 @@
 library(testthat)
-library(denlabutils)
+library(dplab)
 
-test_check("denlabutils")
+test_check("dplab")

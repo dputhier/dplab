@@ -9,7 +9,9 @@ export(count_lines)
 export(create_rand_str)
 export(denlab_gg_theme)
 export(discrete_palette)
+export(get_example)
 export(get_verbosity)
+export(load_example)
 export(make_cmp_string)
 export(make_tmp_file)
 export(mkdir_p)
@@ -20,7 +22,6 @@ export(reload_pac)
 export(set_verbosity)
 export(show_methods)
 importFrom(cli,
-  cli_abort,
   cli_alert_danger,
   cli_alert_info,
   cli_alert_warning

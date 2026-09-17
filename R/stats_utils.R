@@ -47,10 +47,9 @@ print_stat <- function(msg,
     stats <- summary(data)
     names(stats) <- c("Min", "Q1", "Med", "Mean", "Q3", "Max")
     
-    if (is.numeric(round_val) &&
-        length(round_val) == 1 &&
-        !is.na(round_val) &&
-        round_val > 0) {
+    check_this_var(round_val, type = "num")
+    
+    if (round_val >= 0) {
       stats <- round(stats, round_val)
     }
     
@@ -111,13 +110,31 @@ print_stat <- function(msg,
 control_list <- function(expression_value = NULL,
                          gene_list = NULL) {
   
-  if(is.null(expression_value) | is.null(gene_list))
-    print_msg("Please provide a set of expression values and a gene list",
-              msg_type = "STOP")
+  if (!is.numeric(expression_value) ||
+      is.null(names(expression_value))) {
+    print_msg(
+      "expression_value must be a named numeric vector.",
+      msg_type = "STOP"
+    )
+  }
   
   if(length(unique(names(expression_value))) != length(names(expression_value)))
     print_msg("The provided vector of expression values contains duplicate names.",
               msg_type = "STOP")
+  
+  if (anyNA(expression_value)) {
+    print_msg(
+      "expression_value contains missing values (NA).",
+      msg_type = "STOP"
+    )
+  }
+  
+  if (!is.character(gene_list)) {
+    print_msg(
+      "gene_list must be a character vector.",
+      msg_type = "STOP"
+    )
+  }
   
   if(length(unique(gene_list)) != length(gene_list))
     print_msg("The provided gene list contains duplicates.",
@@ -144,8 +161,8 @@ control_list <- function(expression_value = NULL,
   diff <- abs(outer(expression_value[gene_list],
                     expression_value[other_genes], "-"))
   
-  f <- vector()
-  g <- vector()
+  f <- integer()
+  g <- character()
   
   for(i in 1:nrow(diff)){
     if(length(f) > 0){

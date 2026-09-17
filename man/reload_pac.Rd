@@ -4,25 +4,23 @@
 \alias{reload_pac}
 \title{Reload a package (used for development).}
 \usage{
-reload_pac(package_name = "denlabutils")
+reload_pac(package_name = "dplab")
 }
 \arguments{
-\item{package_name}{The name of the package to reload. Defaults to "denlabutils".}
+\item{package_name}{The name of the package to reload. Defaults to "dplab".}
 }
 \value{
 NULL, invisibly. Prints messages about the reload process.
 }
 \description{
 Detach and reload a package. Useful during package development to test changes
-without restarting R. By default, reloads "denlabutils".
+without restarting R. By default, reloads "dplab".
 }
 \examples{
 \dontrun{
-# Reload denlabutils
+# Reload dplab
 reload_pac()
 
-# Reload another package
-reload_pac("mypackage")
 }
 
 }

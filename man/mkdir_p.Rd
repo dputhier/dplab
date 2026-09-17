@@ -15,19 +15,20 @@ NULL, invisibly. Creates the directory as a side effect.
 \description{
 Creates a directory recursively if it doesn't already exist. 
 Similar to `mkdir -p` in Unix. Uses \code{\link{print_msg}} to inform the user.
+set_verbosity() can be used to control the verbosity of messages.
 }
 \examples{
 \dontrun{
 # Create a directory and its parents if they don't exist
 # print a msg using print_msg() (controlled by set_verbosity())
-mkdir_p("/tmp/denlabutils")
+mkdir_p("/tmp/dplab")
 
 # Call again - will not error if already exists
-mkdir_p("/tmp/denlabutils")
+mkdir_p("/tmp/dplab")
 
 # Set verbosity level to see DEBUG messages
 set_verbosity(2)
-mkdir_p("/tmp/denlabutils/subdir")
-mkdir_p("/tmp/denlabutils/subdir")
+mkdir_p("/tmp/dplab/subdir")
+mkdir_p("/tmp/dplab/subdir")
 }
 }

@@ -1,4 +1,4 @@
-# Changelog for denlabutils
+# Changelog for dplab
 
 ## Version 0.1.0 (2026-08-28)
 

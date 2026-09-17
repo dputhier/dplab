@@ -10,10 +10,11 @@ count_lines(afile)
 \item{afile}{Path to the file (character string) or a connection object.}
 }
 \value{
-An integer representing the number of lines in the file.
+An integer representing the number of lines read.
 }
 \description{
-Counts the number of lines in a text file efficiently.
+Counts the number of lines in a text file reading the
+file in chunks to limit memory usage.
 }
 \examples{
 \dontrun{

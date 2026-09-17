@@ -1,7 +1,6 @@
 #################################################################
 ##    Random string generation functions
 #################################################################
-
 #' @title Generate a random string of letters and numbers
 #' @description
 #' This function generates a random string of 10 characters, consisting

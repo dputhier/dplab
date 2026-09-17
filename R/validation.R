@@ -9,6 +9,7 @@
 #' @param type The expected type. Choose from "char", "num", "bool", or "int".
 #' @param x_name The name of the variable as a string.
 #' @param null_accepted Whether NULL values are accepted.
+#' @param empty_accepted Whether empty strings are accepted (only relevant for character type).
 #' @param calling_function The name of the calling function (automatically obtained if envnames is available).
 #' @examples
 #' \dontrun{
@@ -24,7 +25,12 @@ check_this_var <- function(x,
                            type = c("char", "num", "bool", "int"),
                            x_name = deparse(substitute(x)),
                            null_accepted = FALSE,
+                           empty_accepted=FALSE,
                            calling_function = NULL) {
+  
+  # -----------------------------------------------------------------------
+  # Calling function
+  # -----------------------------------------------------------------------
   
   if (is.null(calling_function)) {
     if (requireNamespace("envnames", quietly = TRUE)) {
@@ -36,48 +42,131 @@ check_this_var <- function(x,
   
   fun_info <- paste0("(", calling_function, ")")
   
+  # -----------------------------------------------------------------------
+  # Expected type
+  # -----------------------------------------------------------------------
+  
   type <- match.arg(type)
   
-  if(length(x) > 1)
-    print_msg(x_name, " should be of length 1.", msg_type = "STOP")
+  # -----------------------------------------------------------------------
+  # NULL
+  # -----------------------------------------------------------------------
   
-  if(is.null(x)){
-    if(!null_accepted)
-      print_msg(x_name, " should not be NULL.", msg_type = "STOP")
-  }else if(is.nan(x)){
-    print_msg(x_name, " should not be nan", msg_type = "STOP")
-  }else if(is.infinite(x)){
-    print_msg(x_name, "should not be infinite", msg_type = "STOP")
-  }else if(is.na(x)){
-    print_msg(x_name, " should not be NA", msg_type = "STOP")
-  }else if(is.character(x) && x == ""){
-    print_msg(x_name, "should not be an empty string.", msg_type = "STOP")
+  if (is.null(x)) {
+    if (!null_accepted) {
+      print_msg(
+        x_name, " should not be NULL.",
+        fun_info,
+        msg_type = "STOP"
+      )
+    }
+    
+    return(invisible(NULL))
   }
   
-  if(!is.null(x)){
-    if (type == "char") {
-      if (!is.character(x))
-        print_msg(x_name, " should be a character", fun_info, msg_type = "STOP")
-    } else if (type == "int") {
-      if(is.numeric(x)){
-        if(!x %% 1 == 0){
-          print_msg(x_name, " should be an integer", fun_info, msg_type = "STOP")
-        }
-      }else{
-        print_msg(x_name, " should be an integer", fun_info, msg_type = "STOP")
-      }
-      
-    } else if (type == "num") {
-      if (!is.numeric(x))
-        print_msg(x_name, " should be a numeric", fun_info, msg_type = "STOP")
-    } else if (type == "bool") {
-      if (!is.logical(x))
-        print_msg(x_name, " should be a logical", fun_info, msg_type = "STOP")
-    }else {
-      print_msg(x_name, " has unknown format...", fun_info, msg_type = "STOP")
+  # -----------------------------------------------------------------------
+  # Length
+  # -----------------------------------------------------------------------
+  
+  if (length(x) != 1L) {
+    print_msg(
+      x_name, " should be of length 1.",
+      fun_info,
+      msg_type = "STOP"
+    )
+  }
+  
+  # -----------------------------------------------------------------------
+  # Type
+  # -----------------------------------------------------------------------
+  
+  if (type == "char") {
+    
+    if (!is.character(x)) {
+      print_msg(
+        x_name, " should be a character.",
+        fun_info,
+        msg_type = "STOP"
+      )
+    }
+    
+  } else if (type == "num") {
+    
+    if (!is.numeric(x)) {
+      print_msg(
+        x_name, " should be numeric.",
+        fun_info,
+        msg_type = "STOP"
+      )
+    }
+    
+  } else if (type == "int") {
+    
+    if (!is.numeric(x) || !is.finite(x) || x %% 1 != 0) {
+      print_msg(
+        x_name, " should be an integer.",
+        fun_info,
+        msg_type = "STOP"
+      )
+    }
+    
+  } else if (type == "bool") {
+    
+    if (!is.logical(x)) {
+      print_msg(
+        x_name, " should be logical.",
+        fun_info,
+        msg_type = "STOP"
+      )
     }
   }
+  
+  # -----------------------------------------------------------------------
+  # Missing / invalid values
+  # -----------------------------------------------------------------------
+  
+  if (is.numeric(x)) {
+    
+    if (is.nan(x)) {
+      print_msg(
+        x_name, " should not be NaN.",
+        fun_info,
+        msg_type = "STOP"
+      )
+    }
+    
+    if (is.infinite(x)) {
+      print_msg(
+        x_name, " should not be infinite.",
+        fun_info,
+        msg_type = "STOP"
+      )
+    }
+  }
+  
+  if (is.na(x)) {
+    print_msg(
+      x_name, " should not be NA.",
+      fun_info,
+      msg_type = "STOP"
+    )
+  }
+  
+  if (is.character(x)) {
+    if(x == ""){
+      if(!empty_accepted)
+        print_msg(
+          x_name, " should not be an empty string.",
+          fun_info,
+          msg_type = "STOP"
+        )
+    }
+  
+  }
+  
+  invisible(NULL)
 }
+
 
 
 # -------------------------------------------------------------------------
@@ -189,7 +278,7 @@ clean_var <- function(x, label = "variable") {
   # Remove NA (this also removes NaN).
   x <- x[!is.na(x)]
   
-  # MODIF: Remove infinite values
+  # Remove infinite values
   if (is_num) {
     x <- x[!is.infinite(x)]
   }

@@ -24,21 +24,18 @@
 #' # 1 : Display only INFO type message
 #' # 2 : Display both INFO and DEBUG type message
 #' @export
-#' @importFrom cli cli_abort
 #' @importFrom  stats setNames
 set_verbosity <- function(verbosity_value) {
   
-  if (!is.numeric(verbosity_value) ||
-      length(verbosity_value) != 1 ||
-      is.na(verbosity_value) ||
-      verbosity_value < 0 ||
-      verbosity_value %% 1 != 0) {
-    cli::cli_abort(
-      "{.arg verbosity_value} must be a non-negative integer."
+  check_this_var(verbosity_value, type = "int")
+  if (verbosity_value < 0) {
+    print_msg(
+      "verbosity_value must be a non-negative integer.",
+      msg_type = "STOP"
     )
   }
   
-  opt_name <- "denlabutils_verbosity"
+  opt_name <- "dplab_verbosity"
   
   options(
     stats::setNames(list(verbosity_value), opt_name)
@@ -67,7 +64,7 @@ set_verbosity <- function(verbosity_value) {
 #'
 get_verbosity <- function() {
   
-  opt_name <- "denlabutils_verbosity"
+  opt_name <- "dplab_verbosity"
   
   if (is.null(getOption(opt_name))) {
     set_verbosity(1)
@@ -90,7 +87,7 @@ get_verbosity <- function() {
 #'
 #' @examples
 #' # Set verbosity level to 1
-#' library(denlabutils) 
+#' library(dplab) 
 #' set_verbosity(1)
 #' print_msg("Hello world!", msg_type = "INFO")
 #' set_verbosity(2)

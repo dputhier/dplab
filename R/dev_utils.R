@@ -57,9 +57,7 @@ show_methods <- function(class = NULL,
   # -----------------------------------------------------------------------
   # Validate where
   # -----------------------------------------------------------------------
-  if (!is.character(where) || length(where) != 1 || !nzchar(where)) {
-    print_msg("`where` must be a non-empty character string.")
-  }
+  check_this_var(where, type = "char")
   
   if (where != ".GlobalEnv" &&
       !grepl("^package:", where)) {
@@ -119,24 +117,23 @@ show_methods <- function(class = NULL,
 #' @title Reload a package (used for development).
 #' @description
 #' Detach and reload a package. Useful during package development to test changes
-#' without restarting R. By default, reloads "denlabutils".
+#' without restarting R. By default, reloads "dplab".
 #'
-#' @param package_name The name of the package to reload. Defaults to "denlabutils".
+#' @param package_name The name of the package to reload. Defaults to "dplab".
 #'
 #' @return NULL, invisibly. Prints messages about the reload process.
 #'
 #' @examples
 #' \dontrun{
-#' # Reload denlabutils
+#' # Reload dplab
 #' reload_pac()
 #'
-#' # Reload another package
-#' reload_pac("mypackage")
 #' }
 #'
 #' @export
-reload_pac <- function(package_name = "denlabutils") {
+reload_pac <- function(package_name = "dplab") {
   
+  check_this_var(package_name, type = "char")
   package_string <- paste0("package:", package_name)
   
   if (package_string %in% search()) {

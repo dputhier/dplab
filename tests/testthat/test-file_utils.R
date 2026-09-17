@@ -79,7 +79,7 @@ test_that("make_tmp_file creates a temporary file", {
   expect_true(file.exists(tmp_file))
   
   # Check that filename contains package name
-  expect_match(basename(tmp_file), "^denlabutils_")
+  expect_match(basename(tmp_file), "^dplab_")
   
   # Cleanup
   file.remove(tmp_file)
@@ -92,7 +92,7 @@ test_that("make_tmp_file uses custom prefix", {
   expect_true(file.exists(tmp_file))
   
   # Check that filename contains custom prefix
-  expect_match(basename(tmp_file), "denlabutils_myprefix_")
+  expect_match(basename(tmp_file), "dplab_myprefix_")
   
   # Cleanup
   file.remove(tmp_file)
@@ -126,30 +126,30 @@ test_that("make_tmp_file uses custom package name", {
 
 test_that("make_tmp_file stores files in option when store=TRUE", {
   # Clear any existing temp files
-  options(denlabutils_temp_files = NULL)
+  options(dplab_temp_files = NULL)
   
-  tmp_file1 <- make_tmp_file(store = TRUE)
-  tmp_file2 <- make_tmp_file(store = TRUE)
+  tmp_file1 <- make_tmp_file(cleanup_on_exit = TRUE)
+  tmp_file2 <- make_tmp_file(cleanup_on_exit = TRUE)
   
   # Check that files are stored in options
-  stored_files <- getOption("denlabutils_temp_files")
+  stored_files <- getOption("dplab_temp_files")
   expect_true(tmp_file1 %in% stored_files)
   expect_true(tmp_file2 %in% stored_files)
   expect_equal(length(stored_files), 2)
   
   # Cleanup
   file.remove(tmp_file1, tmp_file2)
-  options(denlabutils_temp_files = NULL)
+  options(dplab_temp_files = NULL)
 })
 
 test_that("make_tmp_file does not store files when store=FALSE", {
   # Clear any existing temp files
-  options(denlabutils_temp_files = NULL)
+  options(dplab_temp_files = NULL)
   
-  tmp_file <- make_tmp_file(store = FALSE)
+  tmp_file <- make_tmp_file(cleanup_on_exit = FALSE)
   
   # Check that file is not stored in options
-  stored_files <- getOption("denlabutils_temp_files")
+  stored_files <- getOption("dplab_temp_files")
   expect_true(is.null(stored_files) || !(tmp_file %in% stored_files))
   
   # Cleanup
@@ -186,8 +186,8 @@ test_that("make_tmp_file validates inputs", {
   expect_error(make_tmp_file(suffix = c("a", "b")))
   
   # Invalid store
-  expect_error(make_tmp_file(store = "TRUE"))
-  expect_error(make_tmp_file(store = c(TRUE, FALSE)))
+  expect_error(make_tmp_file(cleanup_on_exit = "TRUE"))
+  expect_error(make_tmp_file(cleanup_on_exit = c(TRUE, FALSE)))
   
   # Invalid dir
   expect_error(make_tmp_file(dir = 123))
@@ -202,7 +202,7 @@ test_that("make_tmp_file validates inputs", {
 
 test_that("count_lines counts lines in a file", {
   # Create a test file with known number of lines
-  tmp_file <- make_tmp_file(suffix = ".txt", store = FALSE)
+  tmp_file <- make_tmp_file(suffix = ".txt", cleanup_on_exit = FALSE)
   writeLines(c("line 1", "line 2", "line 3", "line 4", "line 5"), tmp_file)
   
   # Count lines
@@ -217,7 +217,7 @@ test_that("count_lines counts lines in a file", {
 
 test_that("count_lines handles empty file", {
   # Create an empty file
-  tmp_file <- make_tmp_file(suffix = ".txt", store = FALSE)
+  tmp_file <- make_tmp_file(suffix = ".txt", cleanup_on_exit = FALSE)
   writeLines(character(0), tmp_file)
   
   # Count lines
@@ -232,7 +232,7 @@ test_that("count_lines handles empty file", {
 
 test_that("count_lines handles single line file", {
   # Create a file with one line
-  tmp_file <- make_tmp_file(suffix = ".txt", store = FALSE)
+  tmp_file <- make_tmp_file(suffix = ".txt", cleanup_on_exit = FALSE)
   writeLines("single line", tmp_file)
   
   # Count lines
@@ -247,7 +247,7 @@ test_that("count_lines handles single line file", {
 
 test_that("count_lines handles large files", {
   # Create a file with many lines
-  tmp_file <- make_tmp_file(suffix = ".txt", store = FALSE)
+  tmp_file <- make_tmp_file(suffix = ".txt", cleanup_on_exit = FALSE)
   writeLines(rep("test line", 15000), tmp_file)
   
   # Count lines
@@ -262,7 +262,7 @@ test_that("count_lines handles large files", {
 
 test_that("count_lines works with connection object", {
   # Create a test file
-  tmp_file <- make_tmp_file(suffix = ".txt", store = FALSE)
+  tmp_file <- make_tmp_file(suffix = ".txt", cleanup_on_exit = FALSE)
   writeLines(c("line 1", "line 2", "line 3"), tmp_file)
   
   # Open connection and count lines
@@ -279,7 +279,7 @@ test_that("count_lines works with connection object", {
 
 test_that("count_lines handles files with blank lines", {
   # Create a file with blank lines
-  tmp_file <- make_tmp_file(suffix = ".txt", store = FALSE)
+  tmp_file <- make_tmp_file(suffix = ".txt", cleanup_on_exit = FALSE)
   writeLines(c("line 1", "", "line 3", "", "", "line 6"), tmp_file)
   
   # Count lines

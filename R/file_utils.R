@@ -5,6 +5,7 @@
 #' @description
 #' Creates a directory recursively if it doesn't already exist. 
 #' Similar to `mkdir -p` in Unix. Uses \code{\link{print_msg}} to inform the user.
+#' set_verbosity() can be used to control the verbosity of messages.
 #'
 #' @param path The path to the directory to create (character string).
 #'
@@ -16,22 +17,19 @@
 #' \dontrun{
 #' # Create a directory and its parents if they don't exist
 #' # print a msg using print_msg() (controlled by set_verbosity())
-#' mkdir_p("/tmp/denlabutils")
+#' mkdir_p("/tmp/dplab")
 #' 
 #' # Call again - will not error if already exists
-#' mkdir_p("/tmp/denlabutils")
+#' mkdir_p("/tmp/dplab")
 #' 
 #' # Set verbosity level to see DEBUG messages
 #' set_verbosity(2)
-#' mkdir_p("/tmp/denlabutils/subdir")
-#' mkdir_p("/tmp/denlabutils/subdir")
+#' mkdir_p("/tmp/dplab/subdir")
+#' mkdir_p("/tmp/dplab/subdir")
 #' }
 mkdir_p <- function(path) {
   
-  if (!is.character(path) || length(path) != 1 || !nzchar(path)) {
-    print_msg("Invalid path specification.",
-              msg_type = "STOP")
-  }
+  check_this_var(path, type = "char")
   
   if (dir.exists(path)) {
     print_msg("Directory already exists:", path,
@@ -62,10 +60,10 @@ mkdir_p <- function(path) {
 #'
 #' @param prefix A prefix for the temporary file. The package name will be 
 #'   prepended to this prefix. Defaults to "tmp".
-#' @param pkgname The package name to use in the filename. Defaults to "denlabutils".
+#' @param pkgname The package name to use in the filename. Defaults to "dplab".
 #' @param suffix A suffix for the temporary file (e.g., ".txt", ".csv"). 
 #'   Defaults to "" (no suffix).
-#' @param store Logical indicating whether to store the file path in the 
+#' @param cleanup_on_exit Logical indicating whether to store the file path in the 
 #'   temporary file list for automatic cleanup. Defaults to TRUE.
 #' @param dir The directory where the temporary file should be created. 
 #'   Defaults to \code{tempdir()}.
@@ -77,42 +75,29 @@ mkdir_p <- function(path) {
 #' @examples
 #' \dontrun{
 #' # Create a temporary file with default settings
-#' tmp_file <- make_tmp_file()
+#' tmp_file <- make_tmp_file(). The set_verbosity() function 
+#' can be used to control the verbosity of messages.
 #' 
 #' # Create a temporary CSV file
 #' tmp_csv <- make_tmp_file(prefix = "data", suffix = ".csv")
 #' 
 #' # Create a temporary file without automatic cleanup
-#' tmp_manual <- make_tmp_file(store = FALSE)
+#' tmp_manual <- make_tmp_file(cleanup_on_exit = FALSE)
 #' }
 make_tmp_file <- function(prefix = "tmp",
-                          pkgname = "denlabutils",
+                          pkgname = "dplab",
                           suffix = "",
-                          store = TRUE,
+                          cleanup_on_exit = TRUE,
                           dir = tempdir()) {
   
-  if (!is.character(prefix) || length(prefix) != 1) {
-    stop("prefix must be a single character string")
-  }
-  
-  if (!is.character(pkgname) || length(pkgname) != 1) {
-    stop("pkgname must be a single character string")
-  }
-  
-  if (!is.character(suffix) || length(suffix) != 1) {
-    stop("suffix must be a single character string")
-  }
-  
-  if (!is.logical(store) || length(store) != 1) {
-    stop("store must be a single logical value")
-  }
-  
-  if (!is.character(dir) || length(dir) != 1) {
-    stop("dir must be a single character string")
-  }
+  check_this_var(prefix, type = "char", empty_accepted = TRUE)
+  check_this_var(pkgname, type = "char")
+  check_this_var(suffix, type = "char", empty_accepted = TRUE)
+  check_this_var(cleanup_on_exit, type = "bool")
+  check_this_var(dir, type = "char", empty_accepted = TRUE)
   
   if (!dir.exists(dir)) {
-    stop("Directory does not exist: ", dir)
+    print_msg(paste0("Directory does not exist: ", dir), msg_type = "STOP")
   }
   
   # Create filename pattern: pkgname_prefix_randomstring_suffix
@@ -120,18 +105,26 @@ make_tmp_file <- function(prefix = "tmp",
   
   # Create temporary file
   tmp_file <- tempfile(pattern = file_pattern, tmpdir = dir, fileext = suffix)
+  print_msg("Creating temporary file: ", tmp_file, msg_type = "INFO")
   
   # Create the file
   file.create(tmp_file)
   
   # Store in option list if requested
-  if (store) {
+  if (cleanup_on_exit) {
+
     opt_name <- paste0(pkgname, "_temp_files")
+    print_msg("Option name for temporary files: ", opt_name, msg_type = "DEBUG")
     current_files <- getOption(opt_name, default = character(0))
+    print_msg("The number of current temporary files stored in options: ", length(current_files), msg_type = "DEBUG")   
+    
+    print_msg("Setting up cleanup on exit.", msg_type = "DEBUG")
     options(stats::setNames(list(c(current_files, tmp_file)), opt_name))
     
     # Set up cleanup on exit if not already done
     cleanup_opt_name <- paste0(pkgname, "_cleanup_registered")
+    print_msg("Option name for cleanup registration: ", cleanup_opt_name, msg_type = "DEBUG")
+    
     if (is.null(getOption(cleanup_opt_name))) {
       reg.finalizer(
         environment(),
@@ -156,11 +149,12 @@ make_tmp_file <- function(prefix = "tmp",
 #################################################################
 #' @title Count the number of lines in a file
 #' @description
-#' Counts the number of lines in a text file efficiently.
+#' Counts the number of lines in a text file reading the
+#' file in chunks to limit memory usage.
 #'
 #' @param afile Path to the file (character string) or a connection object.
 #'
-#' @return An integer representing the number of lines in the file.
+#' @return An integer representing the number of lines read.
 #'
 #' @export
 #'
@@ -169,7 +163,7 @@ make_tmp_file <- function(prefix = "tmp",
 #' # Count lines in a file
 #' n_lines <- count_lines("path/to/file.txt")
 #' print(n_lines)
-#' 
+#'
 #' # Use with a connection
 #' con <- file("path/to/file.txt", "r")
 #' n_lines <- count_lines(con)
@@ -179,27 +173,41 @@ count_lines <- function(afile) {
   
   # Handle connection objects
   if (inherits(afile, "connection")) {
-    lines <- readLines(afile, warn = FALSE)
-    return(length(lines))
+    con <- afile
+    close_con <- FALSE
+  } else {
+    
+    # Handle file path
+    check_this_var(afile, type = "char")
+    
+    if (!file.exists(afile)) {
+      stop("File does not exist: ", afile)
+    }
+    
+    con <- file(afile, open = "r")
+    close_con <- TRUE
   }
   
-  # Handle file path
-  if (!is.character(afile) || length(afile) != 1) {
-    stop("afile must be a file path (character string) or a connection object")
+  if (close_con) {
+    on.exit(close(con), add = TRUE)
   }
   
-  if (!file.exists(afile)) {
-    stop("File does not exist: ", afile)
-  }
+  n_lines <- 0L
   
-  # Efficient line counting using readLines with connection
-  con <- file(afile, "r")
-  on.exit(close(con))
-  
-  n_lines <- 0
-  while (length(chunk <- readLines(con, n = 10000, warn = FALSE)) > 0) {
+  repeat {
+    chunk <- readLines(
+      con,
+      n = 10000L,
+      warn = FALSE
+    )
+    
+    if (!length(chunk)) {
+      break
+    }
+    
     n_lines <- n_lines + length(chunk)
   }
   
-  return(n_lines)
+  n_lines
 }
+
