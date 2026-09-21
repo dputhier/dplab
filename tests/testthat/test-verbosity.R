@@ -16,6 +16,18 @@ test_that("Checking set_verbosity() and get_verbosity()", {
   expect_error(set_verbosity("not a number"))
   expect_error(set_verbosity(1.5))
   expect_error(set_verbosity(c(1, 2)))
+  expect_error(set_verbosity(1, date = 1))
+  expect_error(set_verbosity(1, date = c("%X", "%F")))
+})
+
+test_that("set_verbosity configures an optional date prefix", {
+  set_verbosity(1)
+  expect_null(getOption("dplab_date_format"))
+
+  set_verbosity(1, date = "timestamp")
+  expect_identical(getOption("dplab_date_format"), "timestamp")
+
+  set_verbosity(0)
 })
 
 test_that("print_msg executes without errors", {
@@ -43,4 +55,3 @@ test_that("print_msg handles error types correctly", {
   expect_no_error(print_msg("Warning message", "WARNING"))
   
 })
-

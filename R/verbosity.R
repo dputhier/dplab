@@ -10,12 +10,18 @@
 #' verbosity level is set to 1.
 #'
 #' @param verbosity_value A non-negative integer indicating the verbosity level to be set.
+#' @param date A character string accepted by [format()] for displaying the
+#'   current time before each message, for example `"%X"`. When `NULL` (the
+#'   default), messages are printed without a date/time prefix.
 #'
 #' @return NULL, invisibly.
 #'
 #' @examples
 #' # Set verbosity level to 2
 #' set_verbosity(2)
+#'
+#' # Display the current time before messages
+#' set_verbosity(1, date = "%X")
 #'
 #' # Set verbosity level to 0
 #' set_verbosity(0)
@@ -25,9 +31,10 @@
 #' # 2 : Display both INFO and DEBUG type message
 #' @export
 #' @importFrom  stats setNames
-set_verbosity <- function(verbosity_value) {
+set_verbosity <- function(verbosity_value, date = NULL) {
   
   check_this_var(verbosity_value, type = "int")
+  check_this_var(date, type = "char", null_accepted = TRUE)
   if (verbosity_value < 0) {
     print_msg(
       "verbosity_value must be a non-negative integer.",
@@ -35,10 +42,14 @@ set_verbosity <- function(verbosity_value) {
     )
   }
   
-  opt_name <- "dplab_verbosity"
+  verbosity_option <- "dplab_verbosity"
+  date_option <- "dplab_date_format"
   
   options(
-    stats::setNames(list(verbosity_value), opt_name)
+    stats::setNames(
+      list(verbosity_value, date),
+      c(verbosity_option, date_option)
+    )
   )
   
   invisible(NULL)
@@ -105,28 +116,34 @@ print_msg <- function(...,
   msg_type <- match.arg(msg_type)
   msg <- paste(..., collapse = " ")
   verbosity <- get_verbosity()
+  date_format <- getOption("dplab_date_format")
+  date_prefix <- if (is.null(date_format)) {
+    ""
+  } else {
+    paste0(format(Sys.time(), date_format), " : ")
+  }
   
   if (msg_type == "DEBUG") {
     
     if (verbosity > 1) {
       cli::cli_alert_info(
-        paste0("|-- DEBUG: ", msg)
+        paste0("|-- ", date_prefix, "DEBUG: ", msg)
       )
     }
     
   } else if (msg_type == "INFO") {
     
     if (verbosity > 0) {
-      cli::cli_alert_info(paste0("|-- ", msg))
+      cli::cli_alert_info(paste0("|-- ", date_prefix, msg))
     }
     
   } else if (msg_type == "WARNING") {
     
-    cli::cli_alert_warning(paste0("|-- ", msg))
+    cli::cli_alert_warning(paste0("|-- ", date_prefix, msg))
     
   } else if (msg_type %in% c("STOP", "ERROR")) {
     
-    cli::cli_alert_danger(paste0("|-- ", msg))
+    cli::cli_alert_danger(paste0("|-- ", date_prefix, msg))
     stop()
 
   }
