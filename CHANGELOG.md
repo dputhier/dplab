@@ -4,4 +4,6 @@
 
 ### Major Reorganization
 
-- integration of a collections of functions for future package creation.
+- Integration of a collections of functions.
+- Added tests.
+	
