@@ -4,10 +4,14 @@
 \alias{set_verbosity}
 \title{Set the verbosity level.}
 \usage{
-set_verbosity(verbosity_value)
+set_verbosity(verbosity_value, date = NULL)
 }
 \arguments{
 \item{verbosity_value}{A non-negative integer indicating the verbosity level to be set.}
+
+\item{date}{A character string accepted by [format()] for displaying the
+current time before each message, for example `"%X"`. When `NULL` (the
+default), messages are printed without a date/time prefix.}
 }
 \value{
 NULL, invisibly.
@@ -22,6 +26,9 @@ verbosity level is set to 1.
 \examples{
 # Set verbosity level to 2
 set_verbosity(2)
+
+# Display the current time before messages
+set_verbosity(1, date = "\%X")
 
 # Set verbosity level to 0
 set_verbosity(0)

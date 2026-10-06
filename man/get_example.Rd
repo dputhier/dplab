@@ -25,20 +25,20 @@ path. A dataset already present in that directory is not downloaded again.
 \section{Available datasets}{
 
 \describe{
-  \item{`22745973/files/ENCFF119BYM_H3K36me3_chr1.rda`}{A dataframe containing H3K36me3 
+  \item{`23170765/files/ENCFF119BYM_H3K36me3_chr1.rda`}{A dataframe containing H3K36me3 
   ChIP-seq peaks coordinates on chromosome 1.}
-  \item{`22705530/files/pbmc3k_medium`}{A Seurat object derived from the
+  \item{`23170765/files/pbmc3k_medium`}{A Seurat object derived from the
   10x Genomics PBMC 3k dataset.}
-  \item{`22705530/files/pbmc3k_medium_clusters_enrich`}{A ClusterSet object
+  \item{`23170765/files/pbmc3k_medium_clusters_enrich`}{A ClusterSet object
   derived from the 10x Genomics PBMC 3k dataset, with functional enrichment
   results.}
-  \item{`22705530/files/pbmc3k_medium_clusters`}{A ClusterSet object derived
+  \item{`23170765/files/pbmc3k_medium_clusters`}{A ClusterSet object derived
   from the 10x Genomics PBMC 3k dataset, without functional enrichment
   results.}
-  \item{`22705530/files/pbmc3k_medium_clusters_enrich_sub`}{A ClusterSet
+  \item{`23170765/files/pbmc3k_medium_clusters_enrich_sub`}{A ClusterSet
   object derived from the 10x Genomics PBMC 3k dataset, with a subset of the
   functional enrichment results.}
-  \item{`22705530/files/lymph_node_tiny_2.rda`}{A Seurat object derived from
+  \item{`23170765/files/lymph_node_tiny_2.rda`}{A Seurat object derived from
   the 10x Genomics Visium CytAssist Spatial Gene Expression Library, Human
   Lymph Node dataset.}
   \item{`22705530/files/lymph_node_tiny_clusters_2`}{A ClusterSet object
@@ -51,7 +51,7 @@ These datasets are available in `~/.dplab/datasets` after download.
 
 \examples{
 \dontrun{
-path <- get_example("22745973/files/ENCFF119BYM_H3K36me3_chr1")
+path <- get_example("23170765/files/ENCFF119BYM_H3K36me3_chr1")
 load_example(path)
 }
 

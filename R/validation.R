@@ -260,19 +260,19 @@ clean_var <- function(x, label = "variable") {
   has_dup <- anyDuplicated(x) > 0
   
   if (has_na && !has_nan) {
-    print_msg(label, ": NA value(s) found and removed.", msg_type = "INFO")
+    print_msg(label, ": NA value(s) were removed.", msg_type = "DEBUG")
   }
   
   if (has_nan) {
-    print_msg(label, ": NaN value(s) found and removed.", msg_type = "INFO")
+    print_msg(label, ": NaN value(s) were removed.", msg_type = "DEBUG")
   }
   
   if (has_inf) {
-    print_msg(label, ": infinite value(s) found and removed.", msg_type = "INFO")
+    print_msg(label, ": infinite values were removed.", msg_type = "DEBUG")
   }
   
   if (has_dup) {
-    print_msg(label, ": duplicate value(s) found and removed.", msg_type = "INFO")
+    print_msg(label, ": duplicated values were removed.", msg_type = "DEBUG")
   }
   
   # Remove NA (this also removes NaN).

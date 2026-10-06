@@ -16,11 +16,13 @@ Invisibly, a character vector of the names of objects loaded.
 }
 \description{
 Loads an example dataset downloaded with [get_example()] into an environment.
+Legacy `clusterset::ClusterSet` objects are upgraded to
+`scigenex2::ClusterSet` when scigenex2 is loaded.
 }
 \examples{
 \dontrun{
 set_verbosity(3)
-load_example(get_example("22745973/files/ENCFF119BYM_H3K36me3_chr1"))
+load_example(get_example("23170765/files/ENCFF119BYM_H3K36me3_chr1"))
 }
 
 }

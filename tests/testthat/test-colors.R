@@ -3,21 +3,21 @@
 set_verbosity(0)
 
 test_that("Check colors_for_gradient()", {
-  expect_equal(colors_for_gradient(palette = "Seurat_Like"),
+  expect_equal(dplab::colors_for_gradient(palette = "Seurat_Like"),
                c("#5D50A3", "#9FD7A4", "#FBFDBA", "#FEB163", "#A80B44"))
   
-  expect_equal(colors_for_gradient(palette = "Ju1"),
+  expect_equal(dplab::colors_for_gradient(palette = "Ju1"),
                c("#A9D6E5", "#2166AC", "#000000", "#B2182B", "#FFCA3A"))
   
-  expect_equal(colors_for_gradient(palette = "Je1"),
+  expect_equal(dplab::colors_for_gradient(palette = "Je1"),
                c("#27408B", "#3A5FCD", "#3288BD", "#66C2A5","#ABDDA4", "#E6F598","#FEE08B", "#FDAE61","#F46D43","#D53E4F","#8B2323"))
 })
 
 
 test_that("Check discrete_palette()", {
-  expect_equal(length(discrete_palette(n = 10)), 10)
+  expect_equal(length(dplab::discrete_palette(n = 10)), 10)
   
-  expect_equal(unname(discrete_palette(n = 50)), c(
+  expect_equal(unname(dplab::discrete_palette(n = 50)), c(
     "#9F1717", "#A73C13", "#B0600F", "#BC7B05", "#AC8704", "#6D7A10",
     "#3D6C39", "#1A5F79", "#2D5082", "#554278", "#7B2E73", "#A1206F",
     "#CB496A", "#E96E60", "#EB864C", "#F1A13F", "#FBBF3B", "#D4C932",

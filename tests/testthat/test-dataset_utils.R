@@ -110,7 +110,7 @@ test_that("get_example preserves dataset names that include an rda extension", {
   writeBin(charToRaw("existing file"), cache_file)
 
   expect_identical(
-    get_example("22705530/files/lymph_node_tiny_2.rda"),
+    get_example("23170765/files/lymph_node_tiny_2.rda"),
     cache_file
   )
 })
