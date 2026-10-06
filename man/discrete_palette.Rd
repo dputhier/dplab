@@ -4,7 +4,11 @@
 \alias{discrete_palette}
 \title{Generate a discrete color palette}
 \usage{
-discrete_palette(n = 10, palette = c("Ju1", "De1", "ggplot"))
+discrete_palette(
+  n = 10,
+  palette = c("Ju1", "Ju2", "De1", "Okabe", "Tol_Bright", "Tol_Muted", "Tol_Vibrant",
+    "Tol_HC", "Pal10", "Gray", "Dynamic", "Zissou", "viridis", "ggplot")
+)
 }
 \arguments{
 \item{n}{An integer specifying the number of colors to generate.}
@@ -12,14 +16,37 @@ discrete_palette(n = 10, palette = c("Ju1", "De1", "ggplot"))
 \item{palette}{A character string specifying the palette to use.}
 }
 \value{
-A character vector of color codes.
+A named character vector of color codes.
 }
 \description{
 This function generates a vector of colors for a discrete variable,
 given a specified palette name.
 }
+\details{
+Palettes with a fixed set of colors (e.g. `"Okabe"`, 
+`"Pal10"`) return their original colors when `n` is small enough, and
+are interpolated otherwise. Palettes `"Ju1"`, `"Ju2"` and `"De1"` are always 
+interpolated.
+
+Colorblind-friendly palettes: `"Okabe"`, `"Tol_Bright"`,
+`"Tol_Muted"`, `"Tol_Vibrant"`, `"Tol_HC"`.
+
+`"Dynamic"`, `"Zissou"` and `"viridis"` rely on
+[grDevices::hcl.colors()] (R >= 3.6.0). `"Gray"` is a gray ramp, safe for
+black and white printing.
+}
 \examples{
 discrete_palette()
 discrete_palette(n = 20, palette = "ggplot")
+discrete_palette(n = 5, palette = "Tol_Muted")
+discrete_palette(n = 5, palette = "Tol_HC")
 
+}
+\references{
+Okabe M, Ito K (2008). Color Universal Design (CUD): how to make figures
+and presentations that are friendly to colorblind people.
+<https://jfly.uni-koeln.de/color/>
+
+Paul Tol's Notes. Colour schemes and templates.
+<https://sronpersonalpages.nl/~pault/>
 }

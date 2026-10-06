@@ -1,3 +1,4 @@
+library(testthat)
 # Tests for file utility functions: mkdir_p, make_tmp_file, count_lines
 
 set_verbosity(0)
@@ -159,14 +160,15 @@ test_that("make_tmp_file does not store files when store=FALSE", {
 test_that("make_tmp_file creates file in specified directory", {
   # Create a custom temp directory
   custom_dir <- file.path(tempdir(), paste0("custom_", create_rand_str()))
-  dir.create(custom_dir)
+  dir.create(custom_dir, showWarnings = FALSE)
   
-  tmp_file <- make_tmp_file(dir = custom_dir)
+  tmp_file <- make_tmp_file(dir = custom_dir, cleanup_on_exit = FALSE)
+  Sys.sleep(1)  
   
   # Check that file is in the custom directory
   expect_equal(dirname(tmp_file), custom_dir)
   expect_true(file.exists(tmp_file))
-  
+
   # Cleanup
   file.remove(tmp_file)
   unlink(custom_dir, recursive = TRUE)
@@ -301,3 +303,4 @@ test_that("count_lines validates input", {
   # Non-existent file
   expect_error(count_lines("/nonexistent/file.txt"))
 })
+

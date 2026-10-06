@@ -33,7 +33,9 @@ importFrom(ggplot2,
 )
 importFrom(grDevices,
   colorRampPalette,
-  hcl
+  gray.colors,
+  hcl,
+  hcl.colors
 )
 importFrom(methods,showMethods)
 importFrom(stats,

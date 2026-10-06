@@ -110,71 +110,225 @@ colors_for_gradient <- function(palette = "Je1") {
 #################################################################
 ##    Discrete color palettes
 #################################################################
-
 #' @title Generate a discrete color palette
 #'
 #' @description
 #' This function generates a vector of colors for a discrete variable,
 #' given a specified palette name.
 #'
+#' @details
+#' Palettes with a fixed set of colors (e.g. `"Okabe"`, 
+#' `"Pal10"`) return their original colors when `n` is small enough, and
+#' are interpolated otherwise. Palettes `"Ju1"`, `"Ju2"` and `"De1"` are always 
+#' interpolated.
+#'
+#' Colorblind-friendly palettes: `"Okabe"`, `"Tol_Bright"`,
+#' `"Tol_Muted"`, `"Tol_Vibrant"`, `"Tol_HC"`.
+#'
+#' `"Dynamic"`, `"Zissou"` and `"viridis"` rely on
+#' [grDevices::hcl.colors()] (R >= 3.6.0). `"Gray"` is a gray ramp, safe for
+#' black and white printing.
+#'
 #' @param n An integer specifying the number of colors to generate.
 #' @param palette A character string specifying the palette to use.
 #'
-#' @return A character vector of color codes.
+#' @return A named character vector of color codes.
 #'
-#' @importFrom grDevices hcl colorRampPalette
+#' @importFrom grDevices hcl colorRampPalette gray.colors hcl.colors
 #'
 #' @examples
 #' discrete_palette()
 #' discrete_palette(n = 20, palette = "ggplot")
+#' discrete_palette(n = 5, palette = "Tol_Muted")
+#' discrete_palette(n = 5, palette = "Tol_HC")
+#' 
+#' @references
+#' Okabe M, Ito K (2008). Color Universal Design (CUD): how to make figures
+#' and presentations that are friendly to colorblind people.
+#' <https://jfly.uni-koeln.de/color/>
+#'
+#' Paul Tol's Notes. Colour schemes and templates.
+#' <https://sronpersonalpages.nl/~pault/>
 #'
 #' @export
 discrete_palette <- function(
     n = 10,
-    palette = c("Ju1", "De1", "ggplot")
+    palette = c(
+      "Ju1",
+      "Ju2",
+      "De1",
+      "Okabe",
+      "Tol_Bright",
+      "Tol_Muted",
+      "Tol_Vibrant",
+      "Tol_HC",
+      "Pal10",
+      "Gray",
+      "Dynamic",
+      "Zissou",
+      "viridis",
+      "ggplot"
+    )
 ) {
   
   check_this_var(n, type = "int")
+  
   if (n < 1) {
-    print_msg("n must be a positive integer.", msg_type = "STOP")
+    print_msg(
+      "n must be a positive integer.",
+      msg_type = "STOP"
+    )
   }
   
   n <- as.integer(n)
-  
   palette <- match.arg(palette)
   
-  if (palette == "Ju1") {
+  
+  # ---------------------------------------------------------------------------
+  # Palettes defined by a set of base colors
+  # ---------------------------------------------------------------------------
+  
+  base_palettes <- list(
     
-    palette <- grDevices::colorRampPalette(
-      c(
-        "#9F1717", "#AE5B11", "#C48D00", "#517416",
-        "#115C8A", "#584178", "#9D1C70", "#E96767",
-        "#EC9342", "#FFCA3A", "#8AC926", "#4DADE8",
-        "#9579B9", "#E25CB4", "#DB2020", "#DA7316",
-        "#F0AE00", "#6D9D1E", "#1882C0", "#71529A",
-        "#D02494", "#EF9292", "#F2B57D", "#FFDA77",
-        "#B6E36A", "#7BC4EE", "#AD98C9", "#EA8AC9"
+    # Always interpolated (see 'always_ramp' below)
+    Ju1 = c(
+      "#9F1717", "#AE5B11", "#C48D00", "#517416",
+      "#115C8A", "#584178", "#9D1C70", "#E96767",
+      "#EC9342", "#FFCA3A", "#8AC926", "#4DADE8",
+      "#9579B9", "#E25CB4", "#DB2020", "#DA7316",
+      "#F0AE00", "#6D9D1E", "#1882C0", "#71529A",
+      "#D02494", "#EF9292", "#F2B57D", "#FFDA77",
+      "#B6E36A", "#7BC4EE", "#AD98C9", "#EA8AC9"
+    ),
+    
+    Ju2 = c(
+      "#264653", "#2A9D8F", "#E9C46A", "#F4A261",
+      "#E76F51", "#457B9D", "#6A4C93", "#BC4749",
+      "#386641", "#F28482", "#577590", "#90BE6D"
+    ),
+    
+    De1 = c("#808080", "#EA8AC9", "#9F1717"),
+    
+    # Colorblind-friendly
+    Okabe = c(
+      "#E69F00", "#56B4E9", "#009E73", "#F0E442",
+      "#0072B2", "#D55E00", "#CC79A7", "#000000"
+    ),
+    
+    Tol_Bright = c(
+      "#4477AA", "#66CCEE", "#228833", "#CCBB44",
+      "#EE6677", "#AA3377", "#BBBBBB"
+    ),
+    
+    Tol_HC = c(
+      "#BBBBBB",  "#004488", "#DDAA33", "#BB5566",
+      "#000000"
+      ),
+    
+    Tol_Muted = c(
+      "#CC6677", "#332288", "#DDCC77", "#117733", "#88CCEE",
+      "#882255", "#44AA99", "#999933", "#AA4499", "#BBBBBB"
+    ),
+    
+    Tol_Vibrant = c(
+      "#EE7733", "#0077BB", "#33BBEE", "#EE3377",
+      "#CC3311", "#009988", "#BBBBBB"
+    ),
+    
+    # Other qualitative palettes
+    Pal10 = c(
+      "#557EAA", "#E58A2F", "#D85B5E", "#70AEA9", "#5A9E50",
+      "#E2C34F", "#A2769A", "#EE969F", "#936F5B", "#AAA8A6"
+    )
+  )
+  
+  # Palettes that are always interpolated, whatever n is
+  always_ramp <- c("Ju1", "Ju2", "De1")
+  
+  # Palettes for which interpolation loses the colorblind-friendly property
+  colorblind_safe <- c(
+    "Okabe", "Tol_Bright", "Tol_Muted", "Tol_Vibrant", "Tol_HC"
+  )
+  
+  
+  # ---------------------------------------------------------------------------
+  # Build the palette
+  # ---------------------------------------------------------------------------
+  
+  if (palette %in% names(base_palettes)) {
+    
+    base_colors <- base_palettes[[palette]]
+    
+    if (palette %in% always_ramp) {
+      
+      colors <- grDevices::colorRampPalette(base_colors)(n)
+      
+    } else if (n <= length(base_colors)) {
+      
+      colors <- base_colors[seq_len(n)]
+      
+    } else {
+      
+      msg <- paste0(
+        "Palette '", palette, "' only has ", length(base_colors),
+        " colors: colors are interpolated to reach n = ", n,
+        ", so some may be hard to distinguish."
       )
-    )(n)
+      
+      if (palette %in% colorblind_safe) {
+        msg <- paste0(
+          msg,
+          " The colorblind-friendly property of this palette is also lost."
+        )
+      }
+      
+      print_msg(msg, msg_type = "INFO")
+      
+      colors <- grDevices::colorRampPalette(base_colors)(n)
+    }
     
-  } else if (palette == "De1") {
+  } else if (palette == "Gray") {
     
-    palette <- grDevices::colorRampPalette(
-      c("#808080", "#EA8AC9", "#9F1717")
-    )(n)
+    # Gray ramp, safe for black and white printing
+    colors <- grDevices::gray.colors(
+      n,
+      start = 0.15,
+      end = 0.85
+    )
     
-  } else {
+  } else if (palette == "Dynamic") {
     
-    hues <- seq(15, 375, length.out = n + 1)
+    colors <- grDevices::hcl.colors(n, "Dynamic")
     
-    palette <- grDevices::hcl(
+  } else if (palette == "Zissou") {
+    
+    colors <- grDevices::hcl.colors(n, "Zissou 1")
+    
+  } else if (palette == "viridis") {
+    
+    colors <- grDevices::hcl.colors(n, "viridis")
+    
+  } else if (palette == "ggplot") {
+    
+    hues <- seq(
+      15,
+      375,
+      length.out = n + 1
+    )
+    
+    colors <- grDevices::hcl(
       h = hues,
       l = 65,
-      c = 100
+      c = 70
     )[seq_len(n)]
   }
   
-  names(palette) <- seq_len(n)
   
-  palette
+  # ---------------------------------------------------------------------------
+  # Names
+  # ---------------------------------------------------------------------------
+  
+  names(colors) <- seq_len(n)
+  
+  colors
 }
