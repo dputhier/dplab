@@ -11,7 +11,7 @@ License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Imports: grDevices, methods, utils, envnames, cli, ggplot2, stats
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1
 NeedsCompilation: no
 Suggests:
     testthat
