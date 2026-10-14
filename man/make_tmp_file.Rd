@@ -39,8 +39,9 @@ when the user manually triggers cleanup.
 \examples{
 \dontrun{
 # Create a temporary file with default settings
-tmp_file <- make_tmp_file(). The set_verbosity() function 
-can be used to control the verbosity of messages.
+#  The set_verbosity() function 
+# can be used to control the verbosity of messages.
+tmp_file <- make_tmp_file()
 
 # Create a temporary CSV file
 tmp_csv <- make_tmp_file(prefix = "data", suffix = ".csv")
