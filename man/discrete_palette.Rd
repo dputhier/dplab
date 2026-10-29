@@ -16,24 +16,29 @@ discrete_palette(
 \item{palette}{A character string specifying the palette to use.}
 }
 \value{
-A named character vector of color codes.
+A character vector of color codes.
 }
 \description{
 This function generates a vector of colors for a discrete variable,
 given a specified palette name.
 }
 \details{
-Palettes with a fixed set of colors (e.g. `"Okabe"`, 
-`"Pal10"`) return their original colors when `n` is small enough, and
-are interpolated otherwise. Palettes `"Ju1"`, `"Ju2"` and `"De1"` are always 
-interpolated.
+For palettes defined by a fixed set of base colors, the first `n`
+colors are returned in their defined order when `n` does not exceed
+the number of available colors. Otherwise, the palette is interpolated
+with [grDevices::colorRampPalette()] to generate exactly `n` colors.
 
-Colorblind-friendly palettes: `"Okabe"`, `"Tol_Bright"`,
-`"Tol_Muted"`, `"Tol_Vibrant"`, `"Tol_HC"`.
+The `"Gray"` palette generates a grayscale ramp using
+[grDevices::gray.colors()], with values ranging from `start = 0.15`
+to `end = 0.85`.
 
-`"Dynamic"`, `"Zissou"` and `"viridis"` rely on
-[grDevices::hcl.colors()] (R >= 3.6.0). `"Gray"` is a gray ramp, safe for
-black and white printing.
+`"Dynamic"`, `"Zissou"` and `"viridis"` use
+[grDevices::hcl.colors()] (R >= 3.6.0), with the respective palette
+specifications `"Dynamic"`, `"Zissou 1"` and `"viridis"`.
+
+The `"ggplot"` palette generates `n` colors using
+[grDevices::hcl()] with hues distributed around the color wheel,
+lightness `l = 65` and chroma `c = 70`.
 }
 \examples{
 discrete_palette()

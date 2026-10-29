@@ -63,6 +63,19 @@ test_that("check_this_var function works correctly", {
 
 })
 
+test_that("check_range validates inclusive numeric ranges", {
+  expect_silent(check_range(0, min = 0, max = 1))
+  expect_silent(check_range(1, min = 0, max = 1))
+  expect_silent(check_range(0.5, min = 0, max = 1))
+
+  expect_error(check_range(-0.1, min = 0, max = 1))
+  expect_error(check_range(1.1, min = 0, max = 1))
+  expect_error(check_range(0.5, min = 1, max = 0))
+  expect_error(check_range("0.5", min = 0, max = 1))
+  expect_error(check_range(0.5, min = NA_real_, max = 1))
+  expect_error(check_range(c(0.25, 0.75), min = 0, max = 1))
+})
+
 
 test_that("check_this_file function works correctly", {
 

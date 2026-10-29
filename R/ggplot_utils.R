@@ -1,7 +1,6 @@
 # -------------------------------------------------------------------------
 # denlab_gg_theme             ---------------------------------------------
 # -------------------------------------------------------------------------
-
 #' Custom ggplot2 Theming for DenLab Packages
 #'
 #' This function defines a custom theme for ggplot2 plots with specific adjustments

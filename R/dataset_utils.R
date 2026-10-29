@@ -1,3 +1,6 @@
+#----------------------------------------------------------------
+#    Download an example dataset
+#----------------------------------------------------------------
 #' Download an example dataset
 #'
 #' Downloads an `.rda` example dataset hosted on Zenodo into

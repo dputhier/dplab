@@ -4,10 +4,12 @@
 \alias{count_lines}
 \title{Count the number of lines in a file}
 \usage{
-count_lines(afile)
+count_lines(afile, chunk_size = 10000L)
 }
 \arguments{
 \item{afile}{Path to the file (character string) or a connection object.}
+
+\item{chunk_size}{The number of lines to read at a time (integer).}
 }
 \value{
 An integer representing the number of lines read.

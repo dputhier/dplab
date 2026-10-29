@@ -1,6 +1,6 @@
-#################################################################
-##    mkdir_p
-#################################################################
+#----------------------------------------------------------------
+#    mkdir_p
+#----------------------------------------------------------------
 #' @title Create a directory (including parents) if it doesn't exist
 #' @description
 #' Creates a directory recursively if it doesn't already exist. 
@@ -48,9 +48,10 @@ mkdir_p <- function(path) {
   invisible(NULL)
 }
 
-#################################################################
-##    make_tmp_file
-#################################################################
+#----------------------------------------------------------------
+#    make_tmp_file
+#----------------------------------------------------------------
+
 #' @title Create a temporary file with automatic cleanup
 #' @description
 #' Creates a temporary file that will be automatically removed upon exit.
@@ -91,6 +92,7 @@ make_tmp_file <- function(prefix = "tmp",
                           cleanup_on_exit = TRUE,
                           dir = tempdir()) {
   
+  
   check_this_var(prefix, type = "char", empty_accepted = TRUE)
   check_this_var(pkgname, type = "char")
   check_this_var(suffix, type = "char", empty_accepted = TRUE)
@@ -98,7 +100,8 @@ make_tmp_file <- function(prefix = "tmp",
   check_this_var(dir, type = "char", empty_accepted = TRUE)
   
   if (!dir.exists(dir)) {
-    print_msg(paste0("Directory does not exist: ", dir), msg_type = "STOP")
+    print_msg(paste0("Directory does not exist: ", dir), 
+              msg_type = "STOP")
   }
   
   # Create filename pattern: pkgname_prefix_randomstring_suffix
@@ -116,6 +119,7 @@ make_tmp_file <- function(prefix = "tmp",
 
     opt_name <- paste0(pkgname, "_temp_files")
     print_msg("Option name for temporary files: ", opt_name, msg_type = "DEBUG")
+    
     current_files <- getOption(opt_name, default = character(0))
     print_msg("The number of current temporary files stored in options: ", length(current_files), msg_type = "DEBUG")   
     
@@ -127,6 +131,7 @@ make_tmp_file <- function(prefix = "tmp",
     print_msg("Option name for cleanup registration: ", cleanup_opt_name, msg_type = "DEBUG")
     
     if (is.null(getOption(cleanup_opt_name))) {
+      # On exit delete the temp files stored in the option
       reg.finalizer(
         environment(),
         function(e) {
@@ -144,16 +149,17 @@ make_tmp_file <- function(prefix = "tmp",
   return(tmp_file)
 }
 
+#----------------------------------------------------------------
+#    count_lines
+#----------------------------------------------------------------
 
-#################################################################
-##    count_lines
-#################################################################
 #' @title Count the number of lines in a file
 #' @description
 #' Counts the number of lines in a text file reading the
 #' file in chunks to limit memory usage.
 #'
 #' @param afile Path to the file (character string) or a connection object.
+#' @param chunk_size The number of lines to read at a time (integer).
 #'
 #' @return An integer representing the number of lines read.
 #'
@@ -170,45 +176,32 @@ make_tmp_file <- function(prefix = "tmp",
 #' n_lines <- count_lines(con)
 #' close(con)
 #' }
-count_lines <- function(afile) {
+count_lines <- function(afile, chunk_size = 10000L) {
   
-  # Handle connection objects
   if (inherits(afile, "connection")) {
     con <- afile
-    close_con <- FALSE
+    if (!isOpen(con)) {
+      open(con, "r")
+      on.exit(close(con), add = TRUE)
+    }
   } else {
-    
-    # Handle file path
     check_this_var(afile, type = "char")
     
     if (!file.exists(afile)) {
-      stop("File does not exist: ", afile)
+      print_msg("File does not exist: ", afile, msg_type = "STOP")
     }
     
     con <- file(afile, open = "r")
-    close_con <- TRUE
-  }
-  
-  if (close_con) {
     on.exit(close(con), add = TRUE)
   }
   
-  n_lines <- 0L
+  n_lines <- 0
   
   repeat {
-    chunk <- readLines(
-      con,
-      n = 10000L,
-      warn = FALSE
-    )
-    
-    if (!length(chunk)) {
-      break
-    }
-    
+    chunk <- readLines(con, n = chunk_size, warn = FALSE)
+    if (!length(chunk)) break
     n_lines <- n_lines + length(chunk)
   }
   
   n_lines
 }
-

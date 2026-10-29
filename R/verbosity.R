@@ -35,6 +35,7 @@ set_verbosity <- function(verbosity_value, date = NULL) {
   
   check_this_var(verbosity_value, type = "int")
   check_this_var(date, type = "char", null_accepted = TRUE)
+
   if (verbosity_value < 0) {
     print_msg(
       "verbosity_value must be a non-negative integer.",
@@ -117,6 +118,7 @@ print_msg <- function(...,
   msg <- paste(..., collapse = " ")
   verbosity <- get_verbosity()
   date_format <- getOption("dplab_date_format")
+  
   date_prefix <- if (is.null(date_format)) {
     ""
   } else {

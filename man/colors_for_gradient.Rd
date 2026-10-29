@@ -7,7 +7,8 @@
 colors_for_gradient(palette = "Je1")
 }
 \arguments{
-\item{palette}{A character string specifying the palette to use.}
+\item{palette}{A character string specifying the gradient palette to use.
+See Details for the available names.}
 }
 \value{
 A character vector of color codes.
@@ -15,6 +16,11 @@ A character vector of color codes.
 \description{
 This function generates a vector of colors for a gradient, given
 a specified palette name.
+}
+\details{
+Available case-sensitive palette names are `"Je1"`, `"Seurat_Like"`,
+`"Ju1"`, `"De1"` through `"De9"`, `"Magma"`, `"viridis"`, `"magma2"`,
+and `"plasma"`.
 }
 \examples{
 colors_for_gradient()

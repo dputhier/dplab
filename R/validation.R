@@ -167,6 +167,64 @@ check_this_var <- function(x,
   invisible(NULL)
 }
 
+#' Check whether a numeric value is within a range
+#'
+#' This function checks that a numeric scalar is between `min` and `max`,
+#' including the boundary values.
+#'
+#' @param x The numeric value to check.
+#' @param min The inclusive lower bound.
+#' @param max The inclusive upper bound.
+#' @param x_name The name of the variable to use in error messages.
+#' @return `NULL` invisibly.
+#'
+#' @examples
+#' check_range(0.5, min = 0, max = 1)
+#' @export
+check_range <- function(x,
+                        min,
+                        max,
+                        x_name = deparse(substitute(x))) {
+  check_this_var(
+    x,
+    type = "num",
+    x_name = x_name,
+    calling_function = "check_range"
+  )
+  check_this_var(
+    min,
+    type = "num",
+    x_name = "min",
+    calling_function = "check_range"
+  )
+  check_this_var(
+    max,
+    type = "num",
+    x_name = "max",
+    calling_function = "check_range"
+  )
+
+  if (min > max) {
+    print_msg(
+      "'min' must be less than or equal to 'max'.",
+      msg_type = "STOP"
+    )
+  }
+
+  if (x < min || x > max) {
+    print_msg(
+      x_name,
+      " is not between ",
+      min,
+      " and ",
+      max,
+      ".",
+      msg_type = "STOP"
+    )
+  }
+
+  invisible(NULL)
+}
 
 
 # -------------------------------------------------------------------------

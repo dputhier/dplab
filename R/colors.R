@@ -1,93 +1,19 @@
 #################################################################
 ##    Gradient color palettes
 #################################################################
-
-.gradient_palettes <- list(
-  
-  Je1 = c(
-    "#27408B", "#3A5FCD", "#3288BD", "#66C2A5",
-    "#ABDDA4", "#E6F598", "#FEE08B", "#FDAE61",
-    "#F46D43", "#D53E4F", "#8B2323"
-  ),
-  
-  Seurat_Like = c(
-    "#5D50A3", "#9FD7A4", "#FBFDBA", "#FEB163", "#A80B44"
-  ),
-  
-  Ju1 = c(
-    "#A9D6E5", "#2166AC", "#000000", "#B2182B", "#FFCA3A"
-  ),
-  
-  De1 = c(
-    "#d73027", "#fc8d59", "#fee090",
-    "#e0f3f8", "#91bfdb", "#253494"
-  ),
-  
-  De2 = c(
-    "#FFF7FB", "#ECE2F0", "#D0D1E6", "#A6BDDB",
-    "#67A9CF", "#3690C0", "#02818A", "#016450"
-  ),
-  
-  De3 = c(
-    "#1A1835", "#15464E", "#2B6F39", "#757B33",
-    "#C17A70", "#D490C6", "#C3C1F2", "#CFEBEF"
-  ),
-  
-  De4 = c(
-    "#0000FF", "#00FFFF", "#80FF80", "#FFFF00", "#FF0000"
-  ),
-  
-  De5 = c(
-    "#0000AA", "#0000FF", "#00FFFF", "#80FF80",
-    "#FFFF00", "#FF0000", "#AA0000"
-  ),
-  
-  De6 = c(
-    "#4575b4", "#74add1", "#abd9e9", "#e0f3f8",
-    "#fee090", "#fdae61", "#f46d43", "#d73027"
-  ),
-  
-  De7 = c(
-    "#67001f", "#b2182b", "#d6604d", "#f4a582",
-    "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de",
-    "#4393c3", "#2166ac", "#053061"
-  ),
-  
-  De8 = c(
-    "#2b83ba", "#abdda4", "#fdae61", "#d7191c"
-  ),
-  
-  De9 = c(
-    "#0000BF", "#0000FF", "#0080FF", "#00FFFF",
-    "#40FFBF", "#80FF80", "#BFFF40", "#FFFF00",
-    "#FF8000", "#FF0000", "#BF0000"
-  ),
-  
-  Magma = c(
-    "#ffdb00", "#ffa904", "#ee7b06", "#a12424", "#400b0b"
-  ),
-  
-  viridis = c(
-    "#fde725", "#5ec962", "#21918c", "#3b528b", "#440154"
-  ),
-  
-  magma2 = c(
-    "#fcfdbf", "#fc8961", "#b73779", "#51127c", "#000004"
-  ),
-  
-  plasma = c(
-    "#f0f921", "#f89540", "#cc4778", "#7e03a8", "#0d0887"
-  )
-)
-
-
 #' @title Generate a vector of colors for a gradient
 #'
 #' @description
 #' This function generates a vector of colors for a gradient, given
 #' a specified palette name.
 #'
-#' @param palette A character string specifying the palette to use.
+#' @details
+#' Available case-sensitive palette names are `"Je1"`, `"Seurat_Like"`,
+#' `"Ju1"`, `"De1"` through `"De9"`, `"Magma"`, `"viridis"`, `"magma2"`,
+#' and `"plasma"`.
+#'
+#' @param palette A character string specifying the gradient palette to use.
+#'   See Details for the available names.
 #'
 #' @return A character vector of color codes.
 #'
@@ -98,14 +24,81 @@
 #' @export
 colors_for_gradient <- function(palette = "Je1") {
   
-  palette <- match.arg(
-    palette,
-    choices = names(.gradient_palettes)
+  palettes <- list(
+    Je1 = c(
+      "#27408B", "#3A5FCD", "#3288BD", "#66C2A5",
+      "#ABDDA4", "#E6F598", "#FEE08B", "#FDAE61",
+      "#F46D43", "#D53E4F", "#8B2323"
+    ),
+    Seurat_Like = c(
+      "#5D50A3", "#9FD7A4", "#FBFDBA", "#FEB163", "#A80B44"
+    ),
+    Ju1 = c(
+      "#A9D6E5", "#2166AC", "#000000", "#B2182B", "#FFCA3A"
+    ),
+    De1 = c(
+      "#d73027", "#fc8d59", "#fee090",
+      "#e0f3f8", "#91bfdb", "#253494"
+    ),
+    De2 = c(
+      "#FFF7FB", "#ECE2F0", "#D0D1E6", "#A6BDDB",
+      "#67A9CF", "#3690C0", "#02818A", "#016450"
+    ),
+    De3 = c(
+      "#1A1835", "#15464E", "#2B6F39", "#757B33",
+      "#C17A70", "#D490C6", "#C3C1F2", "#CFEBEF"
+    ),
+    De4 = c(
+      "#0000FF", "#00FFFF", "#80FF80", "#FFFF00", "#FF0000"
+    ),
+    De5 = c(
+      "#0000AA", "#0000FF", "#00FFFF", "#80FF80",
+      "#FFFF00", "#FF0000", "#AA0000"
+    ),
+    De6 = c(
+      "#4575b4", "#74add1", "#abd9e9", "#e0f3f8",
+      "#fee090", "#fdae61", "#f46d43", "#d73027"
+    ),
+    De7 = c(
+      "#67001f", "#b2182b", "#d6604d", "#f4a582",
+      "#fddbc7", "#f7f7f7", "#d1e5f0", "#92c5de",
+      "#4393c3", "#2166ac", "#053061"
+    ),
+    De8 = c(
+      "#2b83ba", "#abdda4", "#fdae61", "#d7191c"
+    ),
+    De9 = c(
+      "#0000BF", "#0000FF", "#0080FF", "#00FFFF",
+      "#40FFBF", "#80FF80", "#BFFF40", "#FFFF00",
+      "#FF8000", "#FF0000", "#BF0000"
+    ),
+    Magma = c(
+      "#ffdb00", "#ffa904", "#ee7b06", "#a12424", "#400b0b"
+    ),
+    viridis = c(
+      "#fde725", "#5ec962", "#21918c", "#3b528b", "#440154"
+    ),
+    magma2 = c(
+      "#fcfdbf", "#fc8961", "#b73779", "#51127c", "#000004"
+    ),
+    plasma = c(
+      "#f0f921", "#f89540", "#cc4778", "#7e03a8", "#0d0887"
+    )
   )
   
-  .gradient_palettes[[palette]]
+  if (!is.character(palette) ||
+      length(palette) != 1L ||
+      is.na(palette) ||
+      !palette %in% names(palettes)) {
+    stop(
+      "`palette` must be one of: ",
+      paste(names(palettes), collapse = ", "),
+      call. = FALSE
+    )
+  }
+  
+  palettes[[palette]]
 }
-
 
 #################################################################
 ##    Discrete color palettes
@@ -117,22 +110,28 @@ colors_for_gradient <- function(palette = "Je1") {
 #' given a specified palette name.
 #'
 #' @details
-#' Palettes with a fixed set of colors (e.g. `"Okabe"`, 
-#' `"Pal10"`) return their original colors when `n` is small enough, and
-#' are interpolated otherwise. Palettes `"Ju1"`, `"Ju2"` and `"De1"` are always 
-#' interpolated.
+#' For palettes defined by a fixed set of base colors, the first `n`
+#' colors are returned in their defined order when `n` does not exceed
+#' the number of available colors. Otherwise, the palette is interpolated
+#' with [grDevices::colorRampPalette()] to generate exactly `n` colors.
 #'
-#' Colorblind-friendly palettes: `"Okabe"`, `"Tol_Bright"`,
-#' `"Tol_Muted"`, `"Tol_Vibrant"`, `"Tol_HC"`.
+#' The `"Gray"` palette generates a grayscale ramp using
+#' [grDevices::gray.colors()], with values ranging from `start = 0.15`
+#' to `end = 0.85`.
 #'
-#' `"Dynamic"`, `"Zissou"` and `"viridis"` rely on
-#' [grDevices::hcl.colors()] (R >= 3.6.0). `"Gray"` is a gray ramp, safe for
-#' black and white printing.
+#' `"Dynamic"`, `"Zissou"` and `"viridis"` use
+#' [grDevices::hcl.colors()] (R >= 3.6.0), with the respective palette
+#' specifications `"Dynamic"`, `"Zissou 1"` and `"viridis"`.
+#'
+#' The `"ggplot"` palette generates `n` colors using
+#' [grDevices::hcl()] with hues distributed around the color wheel,
+#' lightness `l = 65` and chroma `c = 70`.
+#'
 #'
 #' @param n An integer specifying the number of colors to generate.
 #' @param palette A character string specifying the palette to use.
-#'
-#' @return A named character vector of color codes.
+#' 
+#' @return A character vector of color codes.
 #'
 #' @importFrom grDevices hcl colorRampPalette gray.colors hcl.colors
 #'
@@ -154,20 +153,9 @@ colors_for_gradient <- function(palette = "Je1") {
 discrete_palette <- function(
     n = 10,
     palette = c(
-      "Ju1",
-      "Ju2",
-      "De1",
-      "Okabe",
-      "Tol_Bright",
-      "Tol_Muted",
-      "Tol_Vibrant",
-      "Tol_HC",
-      "Pal10",
-      "Gray",
-      "Dynamic",
-      "Zissou",
-      "viridis",
-      "ggplot"
+      "Ju1", "Ju2", "De1",
+      "Okabe", "Tol_Bright", "Tol_Muted", "Tol_Vibrant", "Tol_HC",
+      "Pal10", "Gray", "Dynamic", "Zissou", "viridis", "ggplot"
     )
 ) {
   
@@ -190,7 +178,6 @@ discrete_palette <- function(
   
   base_palettes <- list(
     
-    # Always interpolated (see 'always_ramp' below)
     Ju1 = c(
       "#9F1717", "#AE5B11", "#C48D00", "#517416",
       "#115C8A", "#584178", "#9D1C70", "#E96767",
@@ -209,7 +196,6 @@ discrete_palette <- function(
     
     De1 = c("#808080", "#EA8AC9", "#9F1717"),
     
-    # Colorblind-friendly
     Okabe = c(
       "#E69F00", "#56B4E9", "#009E73", "#F0E442",
       "#0072B2", "#D55E00", "#CC79A7", "#000000"
@@ -221,9 +207,8 @@ discrete_palette <- function(
     ),
     
     Tol_HC = c(
-      "#BBBBBB",  "#004488", "#DDAA33", "#BB5566",
-      "#000000"
-      ),
+      "#BBBBBB", "#004488", "#DDAA33", "#BB5566", "#000000"
+    ),
     
     Tol_Muted = c(
       "#CC6677", "#332288", "#DDCC77", "#117733", "#88CCEE",
@@ -235,19 +220,10 @@ discrete_palette <- function(
       "#CC3311", "#009988", "#BBBBBB"
     ),
     
-    # Other qualitative palettes
     Pal10 = c(
       "#557EAA", "#E58A2F", "#D85B5E", "#70AEA9", "#5A9E50",
       "#E2C34F", "#A2769A", "#EE969F", "#936F5B", "#AAA8A6"
     )
-  )
-  
-  # Palettes that are always interpolated, whatever n is
-  always_ramp <- c("Ju1", "Ju2", "De1")
-  
-  # Palettes for which interpolation loses the colorblind-friendly property
-  colorblind_safe <- c(
-    "Okabe", "Tol_Bright", "Tol_Muted", "Tol_Vibrant", "Tol_HC"
   )
   
   
@@ -259,42 +235,15 @@ discrete_palette <- function(
     
     base_colors <- base_palettes[[palette]]
     
-    if (palette %in% always_ramp) {
-      
-      colors <- grDevices::colorRampPalette(base_colors)(n)
-      
-    } else if (n <= length(base_colors)) {
-      
+    if (n <= length(base_colors)) {
       colors <- base_colors[seq_len(n)]
-      
     } else {
-      
-      msg <- paste0(
-        "Palette '", palette, "' only has ", length(base_colors),
-        " colors: colors are interpolated to reach n = ", n,
-        ", so some may be hard to distinguish."
-      )
-      
-      if (palette %in% colorblind_safe) {
-        msg <- paste0(
-          msg,
-          " The colorblind-friendly property of this palette is also lost."
-        )
-      }
-      
-      print_msg(msg, msg_type = "INFO")
-      
       colors <- grDevices::colorRampPalette(base_colors)(n)
     }
     
   } else if (palette == "Gray") {
     
-    # Gray ramp, safe for black and white printing
-    colors <- grDevices::gray.colors(
-      n,
-      start = 0.15,
-      end = 0.85
-    )
+    colors <- grDevices::gray.colors(n, start = 0.15, end = 0.85)
     
   } else if (palette == "Dynamic") {
     
@@ -310,25 +259,11 @@ discrete_palette <- function(
     
   } else if (palette == "ggplot") {
     
-    hues <- seq(
-      15,
-      375,
-      length.out = n + 1
-    )
-    
-    colors <- grDevices::hcl(
-      h = hues,
-      l = 65,
-      c = 70
-    )[seq_len(n)]
+    hues <- seq(15, 375, length.out = n + 1)
+    colors <- grDevices::hcl(h = hues, l = 65, c = 70)[seq_len(n)]
   }
-  
-  
-  # ---------------------------------------------------------------------------
-  # Names
-  # ---------------------------------------------------------------------------
-  
-  names(colors) <- seq_len(n)
   
   colors
 }
+
+
