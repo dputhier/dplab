@@ -2,16 +2,21 @@
 
 set_verbosity(0)
 
-test_that("is_named_list validates names and NULL handling", {
-  expect_true(is_named_list(list()))
-  expect_true(is_named_list(list(first = 1, second = 2)))
-  expect_true(is_named_list(NULL, null_accepted = TRUE))
+test_that("check_named_list validates names, NULL, and empty lists", {
+  expect_silent(check_named_list(list()))
+  expect_silent(check_named_list(list(first = 1, second = 2)))
+  expect_silent(check_named_list(NULL, null_accepted = TRUE))
 
-  expect_false(is_named_list(NULL))
-  expect_false(is_named_list(1))
-  expect_false(is_named_list(list(1, 2)))
-  expect_false(is_named_list(structure(list(1, 2), names = c("first", ""))))
-  expect_false(is_named_list(structure(list(1, 2), names = c("first", "first"))))
+  expect_error(check_named_list(NULL))
+  expect_error(check_named_list(1))
+  expect_error(check_named_list(list(1, 2)))
+  expect_error(check_named_list(
+    structure(list(1, 2), names = c("first", ""))
+  ))
+  expect_error(check_named_list(
+    structure(list(1, 2), names = c("first", "first"))
+  ))
+  expect_error(check_named_list(list(), empty_accepted = FALSE))
 })
 
 test_that("check_this_var function works correctly", {

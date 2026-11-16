@@ -3,25 +3,52 @@
 # -------------------------------------------------------------------------
 #' Check whether an object is a named list
 #'
-#' Returns `TRUE` when `x` is an empty list or a list with present, non-empty,
-#' unique names. `NULL` can optionally be accepted.
+#' Checks that `x` is a list with present, non-empty, unique names. `NULL` and
+#' empty lists can optionally be accepted.
 #'
 #' @param x Object to check.
 #' @param null_accepted Whether `NULL` is accepted.
-#' @return A logical scalar.
+#' @param empty_accepted Whether an empty list is accepted.
+#' @param x_name The object name used in error messages.
+#' @return `NULL` invisibly.
 #' @examples
-#' is_named_list(list(first = 1, second = 2))
-#' is_named_list(list())
-#' is_named_list(NULL, null_accepted = TRUE)
+#' check_named_list(list(first = 1, second = 2))
+#' check_named_list(list())
+#' check_named_list(NULL, null_accepted = TRUE)
 #' @export
-is_named_list <- function(x, null_accepted = FALSE) {
-  if (is.null(x)) return(null_accepted)
-  if (!is.list(x)) return(FALSE)
-  if (!length(x)) return(TRUE)
+check_named_list <- function(x,
+                             null_accepted = FALSE,
+                             empty_accepted = TRUE,
+                             x_name = deparse(substitute(x))) {
+  if (is.null(x)) {
+    if (!null_accepted) {
+      print_msg(x_name, " should not be NULL.", msg_type = "STOP")
+    }
+    return(invisible(NULL))
+  }
 
-  !is.null(names(x)) &&
-    all(names(x) != "") &&
-    !anyDuplicated(names(x))
+  if (!is.list(x)) {
+    print_msg(x_name, " should be a list.", msg_type = "STOP")
+  }
+
+  if (!length(x)) {
+    if (!empty_accepted) {
+      print_msg(x_name, " should not be an empty list.", msg_type = "STOP")
+    }
+    return(invisible(NULL))
+  }
+
+  list_names <- names(x)
+
+  if (is.null(list_names) || any(list_names == "") || anyDuplicated(list_names)) {
+    print_msg(
+      x_name,
+      " should have non-empty, unique names.",
+      msg_type = "STOP"
+    )
+  }
+
+  invisible(NULL)
 }
 
 # -------------------------------------------------------------------------
