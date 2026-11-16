@@ -1,6 +1,32 @@
 # -------------------------------------------------------------------------
 # check_this_var is intended to check variable type      ------------------
 # -------------------------------------------------------------------------
+#' Check whether an object is a named list
+#'
+#' Returns `TRUE` when `x` is an empty list or a list with present, non-empty,
+#' unique names. `NULL` can optionally be accepted.
+#'
+#' @param x Object to check.
+#' @param null_accepted Whether `NULL` is accepted.
+#' @return A logical scalar.
+#' @examples
+#' is_named_list(list(first = 1, second = 2))
+#' is_named_list(list())
+#' is_named_list(NULL, null_accepted = TRUE)
+#' @export
+is_named_list <- function(x, null_accepted = FALSE) {
+  if (is.null(x)) return(null_accepted)
+  if (!is.list(x)) return(FALSE)
+  if (!length(x)) return(TRUE)
+
+  !is.null(names(x)) &&
+    all(names(x) != "") &&
+    !anyDuplicated(names(x))
+}
+
+# -------------------------------------------------------------------------
+# check_this_var is intended to check variable type      ------------------
+# -------------------------------------------------------------------------
 #' Check variable type.
 #'
 #' This function checks the type of a variable and raises an error if it does not match the expected type.

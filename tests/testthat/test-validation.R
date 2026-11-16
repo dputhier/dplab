@@ -2,6 +2,18 @@
 
 set_verbosity(0)
 
+test_that("is_named_list validates names and NULL handling", {
+  expect_true(is_named_list(list()))
+  expect_true(is_named_list(list(first = 1, second = 2)))
+  expect_true(is_named_list(NULL, null_accepted = TRUE))
+
+  expect_false(is_named_list(NULL))
+  expect_false(is_named_list(1))
+  expect_false(is_named_list(list(1, 2)))
+  expect_false(is_named_list(structure(list(1, 2), names = c("first", ""))))
+  expect_false(is_named_list(structure(list(1, 2), names = c("first", "first"))))
+})
+
 test_that("check_this_var function works correctly", {
   
   set_verbosity(0)
